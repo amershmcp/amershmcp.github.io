@@ -8,28 +8,27 @@
 <body>
     <script type="text/javascript">
         // Custom URL scheme for IndianOil ONE app
-        var indianoilUrl = "indianoilone://";
+        var androidIntentUrl = "intent://#Intent;scheme=indianoilone;package=cx.indianoil.in;end;";
         var androidStoreUrl = "https://play.google.com/store/apps/details?id=cx.indianoil.in";
         var iosStoreUrl = "https://apps.apple.com/in/app/indianoil-one/id1444511410";
         // Detect the user's device
         var userAgent = navigator.userAgent || navigator.vendor || window.opera;
         // Attempt to open the IndianOil ONE app
-         // Function to open the app or redirect
+        // Open the IndianOil ONE app using the best method for the platform
         function openApp() {
-            // Create a hidden iframe for Android
-            var iframe = document.createElement("iframe");
-            iframe.style.display = "none";
-            iframe.src = indianoilUrl;
-            document.body.appendChild(iframe);
-
-            setTimeout(function() {
-                // If the app didn't open, fallback to the appropriate store
-                if (/android/i.test(userAgent)) {
-                    window.location = androidStoreUrl;
-                } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+            if (/android/i.test(userAgent)) {
+                // Android: Use the intent URL to try to open the app
+                window.location = androidIntentUrl;
+            } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                // iOS: Attempt to open the app, fallback to App Store if not installed
+                window.location = iosAppUrl;
+                setTimeout(function() {
                     window.location = iosStoreUrl;
-                }
-            }, 2500); // Wait a bit longer to ensure the app can open
+                }, 1500);
+            } else {
+                // Fallback message for unsupported devices
+                alert("Please use an Android or iOS device to open this link.");
+            }
         }
 
         // Try to open the app
