@@ -7,32 +7,37 @@
 </head>
 <body>
     <script type="text/javascript">
-        // Custom URL scheme for IndianOil ONE app
+        // URLs for the IndianOil ONE app and stores
         var indianoilUrl = "indianoilone://";
+        var androidIntentUrl = "intent://#Intent;scheme=indianoilone;package=cx.indianoil.in;end;";
         var androidStoreUrl = "https://play.google.com/store/apps/details?id=cx.indianoil.in";
+        var iosAppUrl = "indianoilone://";
         var iosStoreUrl = "https://apps.apple.com/in/app/indianoil-one/id1444511410";
+
         // Detect the user's device
         var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-        // Attempt to open the IndianOil ONE app
-         // Function to open the app or redirect
-        function openApp() {
-            // Create a hidden iframe for Android
-            var iframe = document.createElement("iframe");
-            iframe.style.display = "none";
-            iframe.src = indianoilUrl;
-            document.body.appendChild(iframe);
 
-            setTimeout(function() {
-                // If the app didn't open, fallback to the appropriate store
-                if (/android/i.test(userAgent)) {
+        function openApp() {
+            if (/android/i.test(userAgent)) {
+                // Android: Use intent to open the app or redirect to Play Store
+                window.location = androidIntentUrl;
+
+                setTimeout(function() {
                     window.location = androidStoreUrl;
-                } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                }, 2500);
+            } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                // iOS: Attempt to open the app, fallback to App Store if not installed
+                window.location = iosAppUrl;
+
+                setTimeout(function() {
                     window.location = iosStoreUrl;
-                }
-            }, 2500); // Wait a bit longer to ensure the app can open
+                }, 2500);
+            } else {
+                alert("Please use an Android or iOS device to open this link.");
+            }
         }
 
-        // Try to open the app
+        // Trigger the function to open the app
         openApp();
     </script>
 </body>
