@@ -8,32 +8,33 @@
 <body>
     <script type="text/javascript">
         // Custom URL scheme for IndianOil ONE app
-        var indianoilUrl = "indianoilone://";
+        // var indianoilUrl = "indianoilone://";
+         var androidIntentUrl = "intent://#Intent;scheme=indianoilone;package=cx.indianoil.in;end;";
         var androidStoreUrl = "https://play.google.com/store/apps/details?id=cx.indianoil.in";
         var iosStoreUrl = "https://apps.apple.com/in/app/indianoil-one/id1444511410";
         // Detect the user's device
         var userAgent = navigator.userAgent || navigator.vendor || window.opera;
         // Attempt to open the IndianOil ONE app
         // Function to open the app or redirect
-        function openApp() {
-            // Create a hidden iframe for Android
-            var iframe = document.createElement("iframe");
-            iframe.style.display = "none";
-            iframe.src = indianoilUrl;
-            document.body.appendChild(iframe);
+        // Check if the user is on Android or iOS
+        if (/android/i.test(userAgent)) {
+            // Attempt to open the IndianOil ONE app using an intent
+            window.location = androidIntentUrl;
 
+            // Fallback to Play Store if the app is not installed
             setTimeout(function() {
-                // If the app didn't open, fallback to the appropriate store
-                if (/android/i.test(userAgent)) {
-                    window.location = androidStoreUrl;
-                } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                    window.location = iosStoreUrl;
-                }
-            }, 1500); // Wait a bit longer to ensure the app can open
+                window.location = androidStoreUrl;
+            }, 1500);
+        } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+            // For iOS, use the custom URL scheme
+            window.location = "indianoilone://";
+            setTimeout(function() {
+                window.location = iosStoreUrl;
+            }, 1500);
+        } else {
+            // For other devices, provide a fallback message
+            document.body.innerHTML = "Please use an Android or iOS device to open this link.";
         }
-
-        // Try to open the app
-        openApp();
     </script>
 </body>
 </html>
