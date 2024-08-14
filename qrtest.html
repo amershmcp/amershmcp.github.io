@@ -18,7 +18,6 @@
         // Attempt to open the IndianOil ONE app
         window.location = indianoilUrl;
  
-        // Fallback to App Store or Play Store if the app is not installed
         setTimeout(function() {
             if (/android/i.test(userAgent)) {
                 window.location = androidStoreUrl;
