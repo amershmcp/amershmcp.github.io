@@ -14,15 +14,26 @@
         // Detect the user's device
         var userAgent = navigator.userAgent || navigator.vendor || window.opera;
         // Attempt to open the IndianOil ONE app
-        window.location = indianoilUrl;
-        // Fallback to App Store or Play Store if the app is not installed
-        setTimeout(function() {
-            if (/android/i.test(userAgent)) {
-                window.location = androidStoreUrl;
-            } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                window.location = iosStoreUrl;
-            }
-        }, 25);
+        // Function to open the app or redirect
+        function openApp() {
+            // Create a hidden iframe for Android
+            var iframe = document.createElement("iframe");
+            iframe.style.display = "none";
+            iframe.src = indianoilUrl;
+            document.body.appendChild(iframe);
+
+            setTimeout(function() {
+                // If the app didn't open, fallback to the appropriate store
+                if (/android/i.test(userAgent)) {
+                    window.location = androidStoreUrl;
+                } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                    window.location = iosStoreUrl;
+                }
+            }, 1500); // Wait a bit longer to ensure the app can open
+        }
+
+        // Try to open the app
+        openApp();
     </script>
 </body>
 </html>
